@@ -1,0 +1,340 @@
+/* =========================
+   GLOBAL RESET & BASE
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f4f6f8;
+  color: #1f2937;
+}
+
+/* =========================
+   LAYOUT UTILITIES
+========================= */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 24px;
+}
+
+.center-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================
+   CARD
+========================= */
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  animation: fadeUp 0.5s ease;
+}
+
+/* =========================
+   INPUTS
+========================= */
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.btn {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.btn-primary {
+  background: #6366f1;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #4f46e5;
+  transform: translateY(-1px);
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+/* =========================
+   LINKS
+========================= */
+.link {
+  color: #6366f1;
+  cursor: pointer;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+.navbar {
+  background: white;
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.nav-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #6366f1;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* =========================
+   DASHBOARDS
+========================= */
+.dashboard-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* =========================
+   PRODUCT CARD
+========================= */
+.product-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+}
+
+.product-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.product-price {
+  color: #4f46e5;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+/* =========================
+   SELLER FORM
+========================= */
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+/* =========================
+   CHATBOT
+========================= */
+.chatbot {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 280px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  animation: slideUp 0.4s ease;
+}
+
+.chatbot-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 600px) {
+  .navbar {
+    padding: 12px 16px;
+  }
+
+  .chatbot {
+    width: 90%;
+    right: 5%;
+  }
+}
+/* =========================
+   LANDING PAGE FLOW
+========================= */
+.landing-wrapper {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* FLOW CONTAINER */
+.flow-container {
+  width: 100%;
+  overflow: hidden;
+  position: absolute;
+  top: 20px;
+}
+
+.flow-container.bottom {
+  bottom: 20px;
+  top: auto;
+}
+
+/* FLOW ROW */
+.flow {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+}
+
+/* LEFT TO RIGHT */
+.flow-left {
+  animation: flowLeft 20s linear infinite;
+}
+
+/* RIGHT TO LEFT */
+.flow-right {
+  animation: flowRight 20s linear infinite;
+}
+
+/* FLOW CARD */
+.flow-card {
+  background: white;
+  border-radius: 10px;
+  padding: 12px 18px;
+  min-width: 160px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.flow-card h4 {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.flow-card p {
+  font-size: 13px;
+  color: #4f46e5;
+}
+
+/* ANIMATIONS */
+@keyframes flowLeft {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes flowRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.flow-card {
+  width: 180px;
+  height: 140px;
+  background: white;
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* ✅ SAME SIZE FOR ALL IMAGES */
+.flow-card img {
+  width: 100%;
+  height: 70px;          /* FIXED HEIGHT */
+  object-fit: contain;  /* NO STRETCH */
+}
+select {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
