@@ -33,80 +33,74 @@ const SellerOrders = () => {
     <>
       <Navbar />
       <div className="container">
-        <h2 className="dashboard-title">Customer Orders</h2>
+        <div className="seller-header">
+          <h2>📋 Customer Orders</h2>
+        </div>
 
-        {orders.length === 0 && (
-          <p>No orders available</p>
-        )}
-
-        {orders.map(order => (
-          <div key={order._id} className="card" style={{ marginBottom: "16px" }}>
-            {/* BUYER INFO */}
-            <p>
-              <strong>Buyer:</strong>{" "}
-              {order.buyer?.email || "Unknown User"}
-            </p>
-
-            <p>
-              <strong>Address:</strong>{" "}
-              {order.address || "N/A"}
-            </p>
-
-            <p>
-              <strong>Mobile:</strong>{" "}
-              {order.mobile || "N/A"}
-            </p>
-
-            {/* ITEMS */}
-            <h4 style={{ marginTop: "10px" }}>Items</h4>
-
-            {order.items.map((item, index) => (
-              <div
-                key={index}
-                style={{
-                  padding: "8px 0",
-                  borderBottom: "1px solid #eee"
-                }}
-              >
-                <p>
-                  {item.product?.name || "Product removed"}
-                </p>
-                <p>
-                  Qty: {item.quantity} | ₹{" "}
-                  {item.product?.price || item.price}
-                </p>
-              </div>
-            ))}
-
-            <p style={{ marginTop: "10px" }}>
-              <strong>Total:</strong> ₹ {order.totalAmount}
-            </p>
-
-            <p>
-              <strong>Status:</strong>{" "}
-              <span
-                style={{
-                  color:
-                    order.status === "APPROVED"
-                      ? "green"
-                      : "orange",
-                  fontWeight: "bold"
-                }}
-              >
-                {order.status}
-              </span>
-            </p>
-
-            {order.status !== "APPROVED" && (
-              <button
-                className="btn btn-primary"
-                onClick={() => approveOrder(order._id)}
-              >
-                Approve Order
-              </button>
-            )}
+        {orders.length === 0 ? (
+          <div className="seller-empty-state">
+            <p>📭 No orders available yet</p>
           </div>
-        ))}
+        ) : (
+          orders.map(order => (
+            <div key={order._id} className="seller-order-card">
+              {/* BUYER INFO */}
+              <div className="seller-order-info">
+                <div>
+                  <strong>👤 Buyer</strong>
+                  <p>{order.buyer?.email || "Unknown User"}</p>
+                </div>
+                <div>
+                  <strong>📍 Address</strong>
+                  <p>{order.address || "N/A"}</p>
+                </div>
+                <div>
+                  <strong>📱 Mobile</strong>
+                  <p>{order.mobile || "N/A"}</p>
+                </div>
+              </div>
+
+              {/* ITEMS */}
+              <div className="seller-order-items">
+                <h4>🛍️ Order Items</h4>
+                {order.items.map((item, index) => (
+                  <div key={index} className="seller-order-item">
+                    <p><strong>{item.product?.name || "Product removed"}</strong></p>
+                    <p>Quantity: {item.quantity} × ₹{item.product?.price || item.price}</p>
+                  </div>
+                ))}
+              </div>
+
+              <p className="seller-order-total">
+                💰 Total: ₹ {order.totalAmount}
+              </p>
+
+              <p style={{ marginBottom: "16px" }}>
+                <strong>Status: </strong>
+                <span
+                  className={`seller-order-status ${
+                    order.status === "APPROVED"
+                      ? "approved"
+                      : order.status === "REJECTED"
+                      ? "rejected"
+                      : "pending"
+                  }`}
+                >
+                  {order.status}
+                </span>
+              </p>
+
+              {order.status !== "APPROVED" && order.status !== "REJECTED" && (
+                <button
+                  className="seller-approve-btn"
+                  onClick={() => approveOrder(order._id)}
+                >
+                  ✅ Approve Order
+                </button>
+              )}
+            </div>
+          ))
+        )}
       </div>
     </>
   );

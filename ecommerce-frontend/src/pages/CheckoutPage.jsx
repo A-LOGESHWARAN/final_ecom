@@ -40,29 +40,34 @@ const CheckoutPage = () => {
     <>
       <Navbar />
       <div className="container">
-        <h2 className="dashboard-title">Checkout</h2>
+        <div className="checkout-header">
+          <h2>💳 Checkout</h2>
+        </div>
 
-        <input
-          className="input"
-          placeholder="Delivery Address"
-          value={address}
-          onChange={e => setAddress(e.target.value)}
-        />
+        <div className="checkout-form">
+          <h3>📦 Delivery Information</h3>
+          <input
+            className="checkout-input"
+            placeholder="📍 Delivery Address"
+            value={address}
+            onChange={e => setAddress(e.target.value)}
+          />
 
-        <input
-          className="input"
-          placeholder="Mobile Number"
-          value={mobile}
-          onChange={e => setMobile(e.target.value)}
-        />
+          <input
+            className="checkout-input"
+            placeholder="📱 Mobile Number"
+            type="tel"
+            value={mobile}
+            onChange={e => setMobile(e.target.value)}
+          />
 
-        <button
-          className="btn btn-primary"
-          style={{ marginTop: "12px" }}
-          onClick={placeOrder}
-        >
-          Pay & Place Order
-        </button>
+          <button
+            className="checkout-submit-btn"
+            onClick={placeOrder}
+          >
+            💰 Pay & Place Order
+          </button>
+        </div>
       </div>
     </>
   );

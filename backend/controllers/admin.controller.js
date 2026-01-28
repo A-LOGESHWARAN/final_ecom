@@ -46,3 +46,15 @@ exports.approveSeller = async (req, res) => {
     res.status(500).json({ message: "Approval failed" });
   }
 };
+exports.getApprovedSellers = async (req, res) => {
+  try {
+    const sellers = await User.find({
+      role: "SELLER",
+      approved: true
+    }).select("name email");
+
+    res.json(sellers);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch approved sellers" });
+  }
+};

@@ -19,43 +19,40 @@ const Navbar = () => {
           else if (role === "ADMIN") navigate("/admin");
           else navigate("/");
         }}
-        style={{ cursor: "pointer" }}
       >
-        E-Commerce
+        🛍️ E-Commerce
       </span>
 
       <div className="nav-right">
         {/* ✅ CART ONLY FOR BUYER */}
         {role === "BUYER" && (
           <button
-            className="btn btn-primary"
+            className="nav-cart-btn"
             onClick={() => navigate("/cart")}
           >
-            Cart
+            🛒 Cart
           </button>
         )}
 
         {/* ROLE BADGE */}
         {role && (
-          <span
-            style={{
-              marginRight: "10px",
-              fontWeight: "bold"
-            }}
-          >
+          <span className="nav-role-badge">
+            {role === "ADMIN" && "👑 "}
+            {role === "SELLER" && "🏪 "}
+            {role === "BUYER" && "🛒 "}
             {role}
           </span>
         )}
 
         {/* LOGOUT */}
         <button
-          className="btn btn-danger"
+          className="nav-logout-btn"
           onClick={() => {
             logout();
             navigate("/login");
           }}
         >
-          Logout
+          🚪 Logout
         </button>
       </div>
     </nav>

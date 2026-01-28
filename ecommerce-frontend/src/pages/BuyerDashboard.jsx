@@ -61,35 +61,19 @@ const BuyerDashboard = () => {
 
       <div className="container">
         {/* HEADER */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "20px"
-          }}
-        >
-          <h2 className="dashboard-title">Products</h2>
-
+        <div className="buyer-header">
+          <h2>🛍️ Products</h2>
           <button
-            className="btn btn-primary"
+            className="btn"
             onClick={() => navigate("/buyer/orders")}
           >
-            Order Status
+            📦 Order Status
           </button>
         </div>
 
-        {/* ✅ FILTER BAR */}
-        <div
-          className="card"
-          style={{
-            display: "flex",
-            gap: "16px",
-            alignItems: "center",
-            marginBottom: "20px"
-          }}
-        >
-          <a> Filter Here !!</a>
+        {/* FILTER BAR */}
+        <div className="buyer-filter-bar">
+          <label>🔍 Filter Products:</label>
           {/* CATEGORY FILTER */}
           <select
             value={category}
@@ -118,13 +102,15 @@ const BuyerDashboard = () => {
               setMaxPrice("");
             }}
           >
-            Reset
+            🔄 Reset
           </button>
         </div>
 
         {/* PRODUCT GRID */}
         {filteredProducts.length === 0 ? (
-          <p>No products found</p>
+          <div className="buyer-empty-state">
+            <p>😔 No products found. Try adjusting your filters!</p>
+          </div>
         ) : (
           <div className="grid">
             {filteredProducts.map(product => (

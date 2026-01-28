@@ -9,22 +9,17 @@ const SellerDashboard = () => {
       <Navbar />
 
       <div className="container">
-        <h2 className="dashboard-title">Seller Dashboard</h2>
+        <div className="seller-header">
+          <h2>🏪 Seller Dashboard</h2>
+        </div>
 
-        <div
-          style={{
-            display: "flex",
-            gap: "20px",
-            flexWrap: "wrap",
-            marginTop: "20px"
-          }}
-        >
+        <div className="seller-dashboard-cards">
           {/* MANAGE PRODUCTS */}
-          <div className="card" style={{ minWidth: "250px" }}>
-            <h3>Products</h3>
-            <p>Add, update stock and delete products</p>
+          <div className="seller-dashboard-card">
+            <h3>📦 Products</h3>
+            <p>Add, update stock and delete products. Manage your inventory with ease.</p>
             <button
-              className="btn btn-primary"
+              className="btn"
               onClick={() => navigate("/seller/products")}
             >
               Manage Products
@@ -32,11 +27,11 @@ const SellerDashboard = () => {
           </div>
 
           {/* VIEW & APPROVE ORDERS */}
-          <div className="card" style={{ minWidth: "250px" }}>
-            <h3>Orders</h3>
-            <p>View customer orders and approve them</p>
+          <div className="seller-dashboard-card">
+            <h3>📋 Orders</h3>
+            <p>View customer orders and approve them. Track all your sales.</p>
             <button
-              className="btn btn-primary"
+              className="btn"
               onClick={() => navigate("/seller/orders")}
             >
               View Orders

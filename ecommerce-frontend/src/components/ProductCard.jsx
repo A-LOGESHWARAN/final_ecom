@@ -26,60 +26,46 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div
-      className="product-card"
-      style={{
-        border: "1px solid #ddd",
-        padding: "15px",
-        borderRadius: "10px"
-      }}
-    >
+    <div className="buyer-product-card">
       {/* PRODUCT IMAGE */}
       <img
         src={product.image}
         alt={product.name}
         style={{
-          width: "100%",
-          height: "150px",
-          objectFit: "cover",
-          opacity: isOutOfStock ? 0.5 : 1
+          opacity: isOutOfStock ? 0.6 : 1
         }}
       />
 
-      <h3 className="mt-2">{product.name}</h3>
-      <p className="text-muted">₹ {product.price}</p>
+      <h3>{product.name}</h3>
+      <p className="buyer-product-price">₹ {product.price}</p>
 
-      {/* ✅ SELLER NAME (BUYER ONLY) */}
+      {/* SELLER NAME (BUYER ONLY) */}
       {role === "BUYER" && product.seller && (
-        <p style={{ fontSize: "14px", color: "#555" }}>
+        <p className="buyer-product-seller">
           Sold by:{" "}
           <strong>
-            {product.seller.name ||
-              product.seller.email}
+            {product.seller.name || product.seller.email}
           </strong>
         </p>
       )}
 
       {/* STOCK STATUS */}
       <p
-        style={{
-          color: isOutOfStock ? "red" : "green",
-          fontWeight: "bold"
-        }}
+        className={`buyer-product-stock ${
+          isOutOfStock ? "out-of-stock" : "in-stock"
+        }`}
       >
         {isOutOfStock
-          ? "Out of Stock"
-          : `In Stock: ${product.stock}`}
+          ? "❌ Out of Stock"
+          : `✅ In Stock: ${product.stock}`}
       </p>
 
       {/* QUANTITY (ONLY IF IN STOCK) */}
       {!isOutOfStock && (
-        <div className="d-flex align-items-center mb-3">
-          <label className="me-2">Qty:</label>
+        <div className="buyer-quantity-control">
+          <label>Quantity:</label>
           <input
             type="number"
-            className="form-control"
-            style={{ width: "70px" }}
             min="1"
             max={product.stock}
             value={quantity}
@@ -97,17 +83,13 @@ const ProductCard = ({ product }) => {
 
       {/* ADD TO CART */}
       <button
-        className={`btn ${
-          isOutOfStock
-            ? "btn-secondary"
-            : "btn-primary"
-        } w-100`}
+        className="buyer-add-to-cart-btn"
         onClick={addToCart}
         disabled={isOutOfStock}
       >
         {isOutOfStock
-          ? "Unavailable"
-          : "Add to Cart"}
+          ? "❌ Unavailable"
+          : "🛒 Add to Cart"}
       </button>
     </div>
   );

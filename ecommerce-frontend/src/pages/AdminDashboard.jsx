@@ -4,7 +4,8 @@ import Navbar from "../components/Navbar";
 import { toast } from "react-toastify";
 
 const AdminDashboard = () => {
-  const [sellers, setSellers] = useState([]);
+  const [pendingSellers, setPendingSellers] = useState([]);
+  const [approvedSellers, setApprovedSellers] = useState([]);
   const [stats, setStats] = useState({
     buyers: 0,
     sellers: 0,
@@ -12,12 +13,22 @@ const AdminDashboard = () => {
   });
 
   /* FETCH PENDING SELLERS */
-  const fetchSellers = async () => {
+  const fetchPendingSellers = async () => {
     try {
       const res = await api.get("/admin/pending-sellers");
-      setSellers(res.data);
-    } catch (err) {
+      setPendingSellers(res.data);
+    } catch {
       toast.error("Failed to load pending sellers");
+    }
+  };
+
+  /* FETCH APPROVED SELLERS */
+  const fetchApprovedSellers = async () => {
+    try {
+      const res = await api.get("/admin/approved-sellers");
+      setApprovedSellers(res.data);
+    } catch {
+      toast.error("Failed to load approved sellers");
     }
   };
 
@@ -26,7 +37,7 @@ const AdminDashboard = () => {
     try {
       const res = await api.get("/admin/stats");
       setStats(res.data);
-    } catch (err) {
+    } catch {
       toast.error("Failed to load stats");
     }
   };
@@ -36,15 +47,17 @@ const AdminDashboard = () => {
     try {
       await api.put(`/admin/approve-seller/${id}`);
       toast.success("Seller approved");
-      fetchSellers();
+      fetchPendingSellers();
+      fetchApprovedSellers();
       fetchStats();
-    } catch (err) {
+    } catch {
       toast.error("Approval failed");
     }
   };
 
   useEffect(() => {
-    fetchSellers();
+    fetchPendingSellers();
+    fetchApprovedSellers();
     fetchStats();
   }, []);
 
@@ -55,51 +68,59 @@ const AdminDashboard = () => {
       <div className="container">
         <h2 className="dashboard-title">Admin Dashboard</h2>
 
-        {/* STATS CARDS */}
-        <div className="grid" style={{ marginBottom: "24px" }}>
-          <div className="card">
+        {/* STATS */}
+        <div className="grid">
+          <div className="admin-stats-card">
             <h3>Total Buyers</h3>
             <h1>{stats.buyers}</h1>
           </div>
 
-          <div className="card">
+          <div className="admin-stats-card">
             <h3>Total Sellers</h3>
             <h1>{stats.sellers}</h1>
           </div>
 
-          <div className="card">
+          <div className="admin-stats-card">
             <h3>Active Sellers</h3>
             <h1>{stats.activeSellers}</h1>
           </div>
 
-          {/* ✅ NEW: PENDING REQUESTS */}
-          <div className="card">
+          <div className="admin-stats-card">
             <h3>Pending Requests</h3>
-            <h1>{sellers.length}</h1>
+            <h1>{pendingSellers.length}</h1>
           </div>
         </div>
 
-        {/* PENDING SELLERS LIST */}
-        <h3 style={{ marginBottom: "12px" }}>
-          Pending Seller Approvals
-        </h3>
+        {/* APPROVED SELLERS */}
+        <h3 className="admin-section-title">Approved Sellers</h3>
 
-        {sellers.length === 0 && <p>No pending sellers</p>}
+        {approvedSellers.length === 0 && (
+          <p className="admin-empty-state">No approved sellers yet</p>
+        )}
 
-        {sellers.map(s => (
-          <div
-            key={s._id}
-            className="card"
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "12px"
-            }}
-          >
+        {approvedSellers.map(s => (
+          <div key={s._id} className="admin-seller-card">
+            <strong>{s.name}</strong>
             <span>{s.email}</span>
+          </div>
+        ))}
+
+        {/* PENDING SELLERS */}
+        <h3 className="admin-section-title">Pending Seller Approvals</h3>
+
+        {pendingSellers.length === 0 && (
+          <p className="admin-empty-state">No pending sellers</p>
+        )}
+
+        {pendingSellers.map(s => (
+          <div key={s._id} className="admin-seller-card-pending">
+            <div>
+              <strong>{s.name}</strong>
+              <p>{s.email}</p>
+            </div>
+
             <button
-              className="btn btn-primary"
+              className="admin-approve-btn"
               onClick={() => approveSeller(s._id)}
             >
               Approve

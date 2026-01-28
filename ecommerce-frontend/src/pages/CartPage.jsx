@@ -78,7 +78,9 @@ const CartPage = () => {
     return (
       <>
         <Navbar />
-        <div className="container">Loading cart...</div>
+        <div className="container">
+          <div className="cart-loading">🔄 Loading cart...</div>
+        </div>
       </>
     );
   }
@@ -87,84 +89,90 @@ const CartPage = () => {
     <>
       <Navbar />
       <div className="container">
-        <h2 className="dashboard-title">My Cart</h2>
+        <div className="cart-header">
+          <h2>🛒 My Cart</h2>
+        </div>
 
         {cart.items.length === 0 ? (
-          <p>Your cart is empty</p>
+          <div className="cart-empty-state">
+            <p>😔 Your cart is empty. Start shopping to add items!</p>
+          </div>
         ) : (
-          <>
-            {cart.items.map(i =>
-              i.product ? (
-                <div key={i.product._id} className="card">
-                  <h3>{i.product.name}</h3>
-                  <p>₹ {i.product.price}</p>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 350px", gap: "32px" }}>
+            <div>
+              {cart.items.map(i =>
+                i.product ? (
+                  <div key={i.product._id} className="cart-item-card">
+                    <img
+                      src={i.product.image}
+                      alt={i.product.name}
+                      className="cart-item-image"
+                      onError={(e) => {
+                        e.target.src = "https://via.placeholder.com/120x120?text=No+Image";
+                      }}
+                    />
+                    <div className="cart-item-details">
+                      <h3 className="cart-item-name">{i.product.name}</h3>
+                      <p className="cart-item-price">₹ {i.product.price} per item</p>
+                      
+                      <div className="cart-quantity-controls">
+                        <button
+                          className="cart-quantity-btn"
+                          onClick={() =>
+                            updateQuantity(
+                              i.product._id,
+                              i.quantity,
+                              -1
+                            )
+                          }
+                        >
+                          −
+                        </button>
+                        <span className="cart-quantity-display">{i.quantity}</span>
+                        <button
+                          className="cart-quantity-btn"
+                          onClick={() =>
+                            updateQuantity(
+                              i.product._id,
+                              i.quantity,
+                              1
+                            )
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
 
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px"
-                    }}
-                  >
+                      <p className="cart-item-total">
+                        Item Total: ₹ {i.product.price * i.quantity}
+                      </p>
+                    </div>
                     <button
-                      className="btn"
+                      className="cart-remove-btn"
                       onClick={() =>
-                        updateQuantity(
-                          i.product._id,
-                          i.quantity,
-                          -1
-                        )
+                        removeFromCart(i.product._id)
                       }
                     >
-                      −
-                    </button>
-
-                    <span>{i.quantity}</span>
-
-                    <button
-                      className="btn"
-                      onClick={() =>
-                        updateQuantity(
-                          i.product._id,
-                          i.quantity,
-                          1
-                        )
-                      }
-                    >
-                      +
+                      🗑️ Remove
                     </button>
                   </div>
+                ) : null
+              )}
+            </div>
 
-                  <p>
-                    Item Total: ₹{" "}
-                    {i.product.price * i.quantity}
-                  </p>
-
-                  <button
-                    className="btn btn-danger"
-                    onClick={() =>
-                      removeFromCart(i.product._id)
-                    }
-                  >
-                    Remove
-                  </button>
-                </div>
-              ) : null
-            )}
-
-            <h3 style={{ marginTop: "20px" }}>
-              Grand Total: ₹ {total}
-            </h3>
-
-            {/* ✅ FIX: GO TO CHECKOUT */}
-            <button
-              className="btn btn-primary"
-              style={{ marginTop: "15px" }}
-              onClick={() => navigate("/checkout")}
-            >
-              Proceed to Checkout
-            </button>
-          </>
+            <div className="cart-summary">
+              <h3>💰 Order Summary</h3>
+              <div className="cart-grand-total">
+                Grand Total: ₹ {total}
+              </div>
+              <button
+                className="cart-checkout-btn"
+                onClick={() => navigate("/checkout")}
+              >
+                🛒 Proceed to Checkout
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </>
