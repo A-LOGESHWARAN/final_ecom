@@ -17,6 +17,6 @@ router.get("/my", auth, role("BUYER"), getBuyerOrders);
 
 /* SELLER */
 router.get("/seller", auth, role("SELLER"), getSellerOrders);
-router.put("/:id/approve", auth, role("SELLER"), approveOrder);
+router.put("/approve/:id", auth, role("SELLER"), approveOrder);
 
 module.exports = router;
