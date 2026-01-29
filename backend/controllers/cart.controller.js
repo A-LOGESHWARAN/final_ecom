@@ -4,39 +4,43 @@ const Product = require("../models/Product"); // 1. Added Product import
 /* ADD TO CART - With Stock Validation */
 exports.addToCart = async (req, res) => {
   try {
-    const userId = req.user.userId; // 🔥 MUST EXIST
     const { productId, quantity = 1 } = req.body;
+    const userId = req.user.userId;
 
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
     let cart = await Cart.findOne({ user: userId });
 
     if (!cart) {
-      // ✅ CREATE CART WITH USER
       cart = new Cart({
         user: userId,
-        items: [{ product: productId, quantity }]
+        items: []
       });
-    } else {
-      const itemIndex = cart.items.findIndex(
-        item => item.product.toString() === productId
-      );
-
-      if (itemIndex > -1) {
-        cart.items[itemIndex].quantity += quantity;
-      } else {
-        cart.items.push({ product: productId, quantity });
-      }
     }
 
-    await cart.save(); // 🔥 REQUIRED
+    const existingItem = cart.items.find(
+      i => i.product.toString() === productId
+    );
 
-    res.status(200).json(cart);
+    if (existingItem) {
+      existingItem.quantity += quantity;
+    } else {
+      cart.items.push({ product: productId, quantity });
+    }
+
+    await cart.save();
+    res.json(cart);
+
   } catch (err) {
     console.error("ADD TO CART ERROR:", err);
-    res.status(500).json({ message: "Cart validation failed" });
+    res.status(500).json({ message: "Add to cart failed" });
   }
 };
  
