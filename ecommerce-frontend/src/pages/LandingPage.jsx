@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import api from "../api/axios";
 import ProductCard from "../components/ProductCard";
+import Navbar from "../components/Navbar";
 
 /* ✅ SAMPLE FLOW IMAGES */
 const demoFlow = [
@@ -42,26 +43,8 @@ const LandingPage = () => {
 
   return (
     <div className="landing-wrapper">
-
-      {/* TOP FLOW */}
-      <div className="flow-container">
-        <motion.div className="flow flow-left" variants={containerVariants} initial="hidden" animate="show">
-          {demoFlow.map((p, i) => (
-            <motion.div key={i} className="flow-card" variants={itemVariant} whileHover={{ scale: 1.06, y: -6 }}>
-              <img src={p.image} alt={p.name} loading="lazy" />
-              <h4>{p.name}</h4>
-              <p>{p.price}</p>
-            </motion.div>
-          ))}
-          {demoFlow.map((p, i) => (
-            <motion.div key={`t-${i}`} className="flow-card" variants={itemVariant} whileHover={{ scale: 1.06, y: -6 }}>
-              <img src={p.image} alt={p.name} loading="lazy" />
-              <h4>{p.name}</h4>
-              <p>{p.price}</p>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
+      {/* NAVBAR */}
+      <Navbar />
 
       {/* CENTER CONTENT */}
       <div className="center-page">
@@ -115,7 +98,7 @@ const LandingPage = () => {
       </div>
 
       {/* FEATURED PRODUCTS */}
-      <div className="container" style={{ marginTop: 32 }}>
+      <div className="container featured-container" style={{ marginTop: 8 }}>
         <div className="buyer-header">
           <h2>🎯 Featured Products</h2>
           <button className="btn" onClick={() => navigate("/products")}>View All</button>
@@ -136,25 +119,6 @@ const LandingPage = () => {
         )}
       </div>
 
-      {/* BOTTOM FLOW */}
-      <div className="flow-container bottom">
-        <motion.div className="flow flow-right" variants={containerVariants} initial="hidden" animate="show">
-          {demoFlow.map((p, i) => (
-            <motion.div key={i} className="flow-card" variants={itemVariant} whileHover={{ scale: 1.06, y: -6 }}>
-              <img src={p.image} alt={p.name} loading="lazy" />
-              <h4>{p.name}</h4>
-              <p>{p.price}</p>
-            </motion.div>
-          ))}
-          {demoFlow.map((p, i) => (
-            <motion.div key={`b-${i}`} className="flow-card" variants={itemVariant} whileHover={{ scale: 1.06, y: -6 }}>
-              <img src={p.image} alt={p.name} loading="lazy" />
-              <h4>{p.name}</h4>
-              <p>{p.price}</p>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
 
       {/* DECORATIVE SHOP ICON ABOVE ARC */}
       <img className="landing-decor" src="/images/shop.svg" alt="shop" aria-hidden="true" />
@@ -166,17 +130,6 @@ const LandingPage = () => {
         </svg>
       </div>
 
-      {/* BOTTOM MARQUEE */}
-      <div className="marquee-container" aria-hidden="true">
-        <div className="marquee">
-          {demoFlow.concat(demoFlow).map((p, i) => (
-            <div key={`m-${i}`} className="marquee-card">
-              <img src={p.image} alt={p.name} loading="lazy" />
-              <span>{p.name}</span>
-            </div>
-          ))}
-        </div>
-      </div>
 
     </div>
   );
