@@ -1,19 +1,50 @@
 const Product = require("../models/Product");
+const cloudinary = require("../config/cloudinary");
+const fs = require("fs");
 
 /* ADD PRODUCT */
 exports.addProduct = async (req, res) => {
   try {
-    const { name, price, stock, category } = req.body;
+    const body = req.body || {};
+    const { name, price, stock, category } = body;
 
     if (!req.user || !req.user.userId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
+    // Basic validation
+    if (!name || !price || !stock || !category) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    let imageUrl = null;
+    if (req.file) {
+      // If Cloudinary is configured, upload there; otherwise use local file path
+      const hasCloudinaryConfig = process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_SECRET;
+
+      if (hasCloudinaryConfig) {
+        try {
+          const result = await cloudinary.uploader.upload(req.file.path, { folder: "products" });
+          imageUrl = result.secure_url;
+          // remove temp file
+          try { fs.unlinkSync(req.file.path); } catch (e) { console.warn("Failed to remove temp file", e); }
+        } catch (err) {
+          console.error("Cloudinary upload failed:", err);
+          // keep local file as fallback URL (absolute URL)
+          imageUrl = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+        }
+      } else {
+        // fallback: serve directly from uploads folder
+        imageUrl = `/uploads/${req.file.filename}`;
+      }
+    }
+
     const product = await Product.create({
       name,
-      price,
-      stock,
+      price: Number(price),
+      stock: Number(stock),
       category,
+      image: imageUrl,
       seller: req.user.userId
     });
 
@@ -45,9 +76,29 @@ exports.getMyProducts = async (req, res) => {
 /* UPDATE PRODUCT */
 exports.updateProduct = async (req, res) => {
   try {
+    const updateData = { ...req.body };
+
+    if (req.file) {
+      const hasCloudinaryConfig = process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_SECRET;
+
+      if (hasCloudinaryConfig) {
+        try {
+          const result = await cloudinary.uploader.upload(req.file.path, { folder: "products" });
+          updateData.image = result.secure_url;
+          try { fs.unlinkSync(req.file.path); } catch (e) { console.warn("Failed to remove temp file", e); }
+        } catch (err) {
+          console.error("Cloudinary update upload failed:", err);
+          // fallback to local file (absolute URL)
+          updateData.image = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+        }
+      } else {
+        updateData.image = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+      }
+    }
+
     const product = await Product.findOneAndUpdate(
       { _id: req.params.id, seller: req.user.userId },
-      req.body,
+      updateData,
       { new: true }
     );
 

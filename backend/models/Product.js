@@ -6,6 +6,7 @@ const productSchema = new mongoose.Schema(
     price: Number,
     stock: Number,
     category: String,
+    image: String, // URL to product image
 
     seller: {
       type: mongoose.Schema.Types.ObjectId,

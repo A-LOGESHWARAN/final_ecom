@@ -23,9 +23,21 @@ const SellerProducts = () => {
   }, []);
 
   const addProduct = async () => {
-    await api.post("/products", form);
-    setForm({ name: "", price: "", stock: "", category: "" });
-    fetchProducts();
+    try {
+      // Send product data as JSON (image upload removed)
+      await api.post("/products", {
+        name: form.name,
+        price: Number(form.price),
+        stock: Number(form.stock),
+        category: form.category
+      });
+
+      setForm({ name: "", price: "", stock: "", category: "" });
+      fetchProducts();
+    } catch (err) {
+      console.error("Failed to add product", err);
+      alert("Failed to add product");
+    }
   };
 
   const updateStock = async (id) => {
@@ -87,6 +99,8 @@ const SellerProducts = () => {
               onChange={e => setForm({ ...form, category: e.target.value })} 
             />
           </div>
+
+
 
           <button className="seller-add-product-btn" onClick={addProduct}>
             ➕ Add Product

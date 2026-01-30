@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { toast } from "react-toastify";
 
 const ProductCard = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
+  const navigate = useNavigate();
 
   const role = localStorage.getItem("role"); // BUYER / SELLER / ADMIN
   const isOutOfStock = product.stock <= 0;
@@ -11,15 +13,20 @@ const ProductCard = ({ product }) => {
   const addToCart = async () => {
     if (isOutOfStock) return;
 
+    // require buyer login to add to cart
+    if (role !== "BUYER") {
+      toast.info("Please login as a Buyer to add items to cart");
+      navigate("/login");
+      return;
+    }
+
     try {
       await api.post("/cart", {
         productId: product._id,
         quantity
       });
 
-      toast.success(
-        `${quantity} ${product.name} added to cart 🛒`
-      );
+      toast.success(`${quantity} ${product.name} added to cart 🛒`);
     } catch (err) {
       toast.error("Failed to add product to cart");
     }
@@ -29,7 +36,7 @@ const ProductCard = ({ product }) => {
     <div className="buyer-product-card">
       {/* PRODUCT IMAGE */}
       <img
-        src={product.image}
+        src={product.image || ""}
         alt={product.name}
         style={{
           opacity: isOutOfStock ? 0.6 : 1
@@ -89,6 +96,8 @@ const ProductCard = ({ product }) => {
       >
         {isOutOfStock
           ? "❌ Unavailable"
+          : role !== "BUYER"
+          ? "🔒 Login to Buy"
           : "🛒 Add to Cart"}
       </button>
     </div>

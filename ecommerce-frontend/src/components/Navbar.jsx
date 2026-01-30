@@ -24,6 +24,7 @@ const Navbar = () => {
       </span>
 
       <div className="nav-right">
+
         {/* ✅ CART ONLY FOR BUYER */}
         {role === "BUYER" && (
           <button
@@ -45,15 +46,17 @@ const Navbar = () => {
         )}
 
         {/* LOGOUT */}
-        <button
-          className="nav-logout-btn"
-          onClick={() => {
-            logout();
-            navigate("/login");
-          }}
-        >
-          🚪 Logout
-        </button>
+        {role && (
+          <button
+            className="nav-logout-btn"
+            onClick={() => {
+              logout();
+              navigate("/login");
+            }}
+          >
+            🚪 Logout
+          </button>
+        )}
       </div>
     </nav>
   );

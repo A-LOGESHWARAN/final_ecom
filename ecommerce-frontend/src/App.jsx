@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
 import LandingPage from "./pages/LandingPage";
+import Products from "./pages/Products";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,6 +25,8 @@ function App() {
     <Routes>
       {/* LANDING */}
       <Route path="/" element={<LandingPage />} />
+      {/* PUBLIC PRODUCTS */}
+      <Route path="/products" element={<Products />} />
 
       {/* AUTH */}
       <Route path="/login" element={<Login />} />
