@@ -20,34 +20,60 @@ const BuyerOrders = () => {
       <div className="container">
         <h2 className="dashboard-title">My Orders</h2>
 
-        {orders.length === 0 && <p>No orders yet</p>}
-
-        {orders.map(order => (
-          <div key={order._id} className="card">
-            <p>
-              <strong>Total:</strong> ₹ {order.totalAmount}
-            </p>
-
-            <p>
-              <strong>Status:</strong>{" "}
-              <span
-                style={{
-                  color:
-                    order.status === "APPROVED"
-                      ? "green"
-                      : "orange"
-                }}
-              >
-                {order.status}
-              </span>
-            </p>
-
-            <p>
-              <strong>Placed On:</strong>{" "}
-              {new Date(order.createdAt).toLocaleDateString()}
-            </p>
+        {orders.length === 0 && (
+          <div className="buyer-empty-state">
+            <p>No orders yet — start shopping to place your first order.</p>
           </div>
-        ))}
+        )}
+
+        <div className="orders-grid">
+          {orders.map(order => {
+            const shortId = order._id ? String(order._id).slice(-6).toUpperCase() : "----";
+            return (
+              <div key={order._id} className="card order-card">
+                <div className="order-header">
+                  <div className="order-id">Order #{shortId}</div>
+                  <div
+                    className={
+                      `order-status ${
+                        order.status === "APPROVED"
+                          ? "status-approved"
+                          : order.status === "REJECTED"
+                          ? "status-rejected"
+                          : "status-pending"
+                      }`
+                    }
+                  >
+                    {order.status}
+                  </div>
+                </div>
+
+                <div className="order-body">
+                  <p className="order-total">
+                    <strong>Total:</strong> ₹ {order.totalAmount}
+                  </p>
+
+                  <p className="order-meta">
+                    <strong>Placed On:</strong> {new Date(order.createdAt).toLocaleDateString()}
+                  </p>
+
+                  {order.items && order.items.length > 0 && (
+                    <div className="order-items">
+                      <strong>Items:</strong>
+                      <ul>
+                        {order.items.map((it, idx) => (
+                          <li key={idx}>
+                            {it.product?.name ? it.product.name : 'Product'} x {it.quantity} — ₹ {it.price}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </>
   );
