@@ -65,7 +65,7 @@ const SellerOrders = () => {
                 <h4>🛍️ Order Items</h4>
                 {order.items.map((item, index) => (
                   <div key={index} className="seller-order-item">
-                    <p><strong>{item.product?.name || "Product removed"}</strong></p>
+                    <p><strong>{item.product?.name || item.name || "Product removed"}</strong></p>
                     <p>Quantity: {item.quantity} × ₹{item.product?.price || item.price}</p>
                   </div>
                 ))}

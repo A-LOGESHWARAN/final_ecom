@@ -30,6 +30,7 @@ exports.placeOrder = async (req, res) => {
       seller: sellerId,
       items: cart.items.map(i => ({
         product: i.product._id,
+        name: i.product.name,
         quantity: i.quantity,
         price: i.product.price
       })),
@@ -112,7 +113,9 @@ exports.getBuyerOrders = async (req, res) => {
   try {
     const orders = await Order.find({
       buyer: req.user.userId
-    }).sort({ createdAt: -1 });
+    })
+      .sort({ createdAt: -1 })
+      .populate("items.product", "name price");
 
     res.json(orders);
   } catch (err) {

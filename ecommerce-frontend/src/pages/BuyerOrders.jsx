@@ -63,7 +63,7 @@ const BuyerOrders = () => {
                       <ul>
                         {order.items.map((it, idx) => (
                           <li key={idx}>
-                            {it.product?.name ? it.product.name : 'Product'} x {it.quantity} — ₹ {it.price}
+                            {it.product?.name || it.name || 'Product'} x {it.quantity} — ₹ {it.price}
                           </li>
                         ))}
                       </ul>
